@@ -1,0 +1,59 @@
+{
+	"info": {
+		"_postman_id": "9eacc2e4-a849-4dc5-b896-cc95023bc9a3",
+		"name": "New Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "45000357"
+	},
+	"item": [
+		{
+			"name": "Khipu Prueba Técnica",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-api-key",
+						"value": "0ae7de31-3b20-47c3-8c00-f85c47f758fe",
+						"type": "text"
+					},
+					{
+						"key": "x-signature",
+						"value": "6e89159132f935e20f67217b1f963289959cc49634499f6c156a9385a933690f",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": \"Cobro desde Postman v3.0\",\r\n  \"amount\": 5000,\r\n  \"currency\": \"CLP\",\r\n  \"transaction_id\": \"orden-roman-prueba-002\",\r\n  \"return_url\": \"https://misitio.cl/retorno\",\r\n  \"cancel_url\": \"https://misitio.cl/cancelado\",\r\n  \"payer_email\": \"cliente@ejemplo.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://payment-api.khipu.com/v3/payments",
+					"protocol": "https",
+					"host": [
+						"payment-api",
+						"khipu",
+						"com"
+					],
+					"path": [
+						"v3",
+						"payments"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
