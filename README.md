@@ -1,6 +1,6 @@
 # Prueba Técnica: Integración de Pagos con Khipu usando Postman y Python
 
-Este repositorio documenta el desarrollo completo de una integración de pagos utilizando la API de Khipu. El proceso fue realizado como parte de una prueba técnica, donde se cumplieron los requisitos de generar un cobro de prueba, visualizarlo en la plataforma de Khipu, y documentar el proceso técnico.
+Este repositorio documenta el desarrollo completo de una integración de pagos utilizando la API de Khipu. El proceso fue realizado como parte de una prueba técnica, donde se cumplieron los requisitos de generar un cobro de prueba, visualizarlo en la plataforma de Khipu, y verificar el flujo de pago simulado.
 
 ## Tecnologías utilizadas
 
@@ -35,12 +35,6 @@ Este repositorio documenta el desarrollo completo de una integración de pagos u
 }
 ```
 
-* Se agregaron los siguientes headers:
-
-  * `Content-Type: application/json`
-  * `x-api-key`: (API Key de Khipu)
-  * `x-signature`: Firma HMAC SHA256 generada con Python.
-
 ### 3. Generación de la firma HMAC SHA256
 
 Se creó el archivo `Generar_Firma_HMAC_SHA256.py` con el siguiente código:
@@ -48,18 +42,36 @@ Se creó el archivo `Generar_Firma_HMAC_SHA256.py` con el siguiente código:
 ```python
 import hmac
 import hashlib
+import json
 
-# Clave secreta entregada por Khipu
-secret = b'd28b8445b536406379f72800b42f8887061b4109'
+# Tu llave secreta aquí
+secret = 'a288b445b536406379f72800b42f8887061b4109'
 
-# El mensaje debe ser la ruta SIN dominio
-msg = b'/v3/payments/v4ei-x5cw-uaky'
+# Tu JSON exacto (sin saltos de línea ni espacios innecesarios)
+body = {
+    "subject": "Cobro desde Postman v3.0",
+    "amount": 5000,
+    "currency": "CLP",
+    "transaction_id": "orden-roman-prueba-002",
+    "return_url": "https://misitio.cl/retorno",
+    "cancel_url": "https://misitio.cl/cancelado",
+    "payer_email": "cliente@ejemplo.com"
+}
 
-signature = hmac.new(secret, msg, hashlib.sha256).hexdigest()
+# Serializar el body (asegúrate que se vea igual al enviado en Postman)
+serialized_body = json.dumps(body, separators=(',', ':'))
+
+# Crear firma HMAC SHA256
+signature = hmac.new(
+    key=bytes(secret, 'utf-8'),
+    msg=bytes(serialized_body, 'utf-8'),
+    digestmod=hashlib.sha256
+).hexdigest()
+
 print("x-signature:", signature)
 ```
 
-Este script genera la firma que debe incluirse como `x-signature` en los headers de la solicitud.
+**Explicación**: Este script genera la firma HMAC SHA256 que debe incluirse como valor del header `x-signature` al realizar la solicitud `POST` a la API de Khipu. Se asegura que el cuerpo (`body`) sea idéntico al enviado, sin espacios ni saltos de línea que puedan alterar la firma.
 
 ### 4. Visualización del cobro generado
 
