@@ -1,29 +1,31 @@
-# Prueba Técnica: Integración de Pagos con Khipu usando Postman y Python
+Prueba Técnica: Integración de Pagos con Khipu usando Postman y Python
 
 Este repositorio documenta el desarrollo completo de una integración de pagos utilizando la API de Khipu. El proceso fue realizado como parte de una prueba técnica, donde se cumplieron los requisitos de generar un cobro de prueba, visualizarlo en la plataforma de Khipu, y verificar el flujo de pago simulado.
 
-## Tecnologías utilizadas
+Tecnologías utilizadas
 
-* **Postman**: Para realizar y firmar solicitudes HTTP.
-* **Python**: Para generar firmas HMAC SHA256 y comprender la lógica de integración.
-* **GitHub**: Para documentar el proceso y subir evidencia.
+Postman: Para realizar y firmar solicitudes HTTP.
 
----
+Python: Para generar firmas HMAC SHA256 y comprender la lógica de integración.
 
-## Paso a Paso de la Implementación
+GitHub: Para documentar el proceso y subir evidencia.
 
-### 1. Registro y configuración en Khipu
+Paso a Paso de la Implementación
 
-* Se creó una cuenta en [https://khipu.com](https://khipu.com).
-* Se accedió al panel de cobrador en modo desarrollador.
-* Se obtuvo el **Receiver ID** y **Llave Secreta** desde la sección "Opciones de la cuenta".
+1. Registro y configuración en Khipu
 
-### 2. Generación del cobro
+Se creó una cuenta en https://khipu.com.
 
-* Se utilizó Postman para realizar una solicitud `POST` a `https://payment-api.khipu.com/v3/payments`.
-* El cuerpo (`Body`) de la solicitud incluyó:
+Se accedió al panel de cobrador en modo desarrollador.
 
-```json
+Se obtuvo el Receiver ID y Llave Secreta desde la sección "Opciones de la cuenta".
+
+2. Generación del cobro
+
+Se utilizó Postman para realizar una solicitud POST a https://payment-api.khipu.com/v3/payments.
+
+El cuerpo (Body) de la solicitud incluyó:
+
 {
   "subject": "Cobro desde Postman v3.0",
   "amount": 5000,
@@ -33,13 +35,11 @@ Este repositorio documenta el desarrollo completo de una integración de pagos u
   "cancel_url": "https://misitio.cl/cancelado",
   "payer_email": "cliente@ejemplo.com"
 }
-```
 
-### 3. Generación de la firma HMAC SHA256
+3. Generación de la firma HMAC SHA256
 
-Se creó el archivo `Generar_Firma_HMAC_SHA256.py` con el siguiente código:
+Se creó el archivo Generar_Firma_HMAC_SHA256.py con el siguiente código:
 
-```python
 import hmac
 import hashlib
 import json
@@ -69,40 +69,58 @@ signature = hmac.new(
 ).hexdigest()
 
 print("x-signature:", signature)
-```
 
-**Explicación**: Este script genera la firma HMAC SHA256 que debe incluirse como valor del header `x-signature` al realizar la solicitud `POST` a la API de Khipu. Se asegura que el cuerpo (`body`) sea idéntico al enviado, sin espacios ni saltos de línea que puedan alterar la firma.
+Explicación: Este script genera la firma HMAC SHA256 que debe incluirse como valor del header x-signature al realizar la solicitud POST a la API de Khipu. Se asegura que el cuerpo (body) sea idéntico al enviado, sin espacios ni saltos de línea que puedan alterar la firma.
 
-### 4. Visualización del cobro generado
+4. Visualización del cobro generado
 
-Al enviar la solicitud, se recibió una respuesta `200 OK` con las URLs de pago. Se accedió a los siguientes enlaces:
+Al enviar la solicitud, se recibió una respuesta 200 OK con las URLs de pago. Se accedió a los siguientes enlaces:
 
-* **app\_url**: URL del cobro generado
-* **simplified\_transfer\_url**: para pago con transferencia
-* **transfer\_url**: para interfaz bancaria simplificada
+app_url: URL del cobro generado
 
-### 5. Confirmación en Khipu
+simplified_transfer_url: para pago con transferencia
 
-* Se ingresó a la plataforma Khipu como cobrador.
-* El cobro apareció listado como activo.
-* Al hacer clic en el botón de pago y completar la acción en el entorno de prueba, el estado del cobro cambió a **completado** (color verde).
+transfer_url: para interfaz bancaria simplificada
 
----
+5. Confirmación en Khipu
 
-## Estructura del Repositorio
+Se ingresó a la plataforma Khipu como cobrador.
 
-* `Generar_Firma_HMAC_SHA256.py`: Script para generar firmas.
-* `Crear_Cobro.py`: (opcional, no fue necesario para la prueba, sólo de referencia).
-* `khipu_prueba_tecnica.postman_collection.json`: Exportación de la colección usada en Postman.
-* Carpeta de evidencias: capturas de pantalla del proceso (registro, cobro, headers, etc).
+El cobro apareció listado como activo.
 
----
+Al hacer clic en el botón de pago y completar la acción en el entorno de prueba, el estado del cobro cambió a completado (color verde).
 
-## Observaciones Finales
+6. Resumen de Recaudación Simulada
 
-* Se trabajó en modo desarrollador, por lo tanto, los pagos fueron simulados.
+Se adjunta el archivo Resumen_Recaudacion_Khipu_Desarrollo.xlsx, generado automáticamente por la plataforma de Khipu en ambiente de desarrollo, que refleja:
+
+El pago de prueba por $5.000 realizado exitosamente.
+
+El banco receptor (DemoBank) y cuenta simulada.
+
+El desglose de la recaudación bruta, descuentos y total neto.
+
+Este archivo valida que el proceso completo de integración fue realizado correctamente, desde la generación del cobro hasta la visualización del resumen de pago final en el entorno de desarrollo de Khipu.
+
+Estructura del Repositorio
+
+Generar_Firma_HMAC_SHA256.py: Script para generar firmas.
+
+Crear_Cobro.py: (opcional, no fue necesario para la prueba, sólo de referencia).
+
+khipu_prueba_tecnica.postman_collection.json: Exportación de la colección usada en Postman.
+
+Resumen_Recaudacion_Khipu_Desarrollo.xlsx: Archivo generado por Khipu que valida el pago simulado.
+
+Carpeta de evidencias: capturas de pantalla del proceso (registro, cobro, headers, etc).
+
+Observaciones Finales
+
+Se trabajó en modo desarrollador, por lo tanto, los pagos fueron simulados.
 
 Este repositorio cumple con todos los requisitos planteados en la prueba técnica de integración con la API de Khipu.
+
+
 
 ---
 
